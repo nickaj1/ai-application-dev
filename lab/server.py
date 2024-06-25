@@ -126,3 +126,30 @@ def find_by_uuid(id):
             return person
     return {"message":"person not found"}, 404
 
+
+# Create DELETE /person/id endpoint
+@app.route("/person/<uuid:id>",methods=["DELETE"])
+def delete_by_uuid(id):
+    for person in data:
+        if person["id"] == str(id):
+            data.remove(person)
+            return {"message":f"{id}"}, 200
+    return {"message":"person not found"}
+
+    
+
+# Step 4: Parse JSON from Request body
+@app.route("/person", methods=["POST"])
+def add_by_uuid():
+    new_person = request.json
+    if not new_person:
+        return {"message": "Invalid input parameter"}, 404
+    # code to validate new_person ommited
+    data.append(new_person)
+    return {"message":f"{new_person['id']}"}, 200
+
+
+# Step 5: Add error handlers
+@app.errorhandler(404)
+def api_not_found(error):
+    return {"message": "API not found"}, 404
